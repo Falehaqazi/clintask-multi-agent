@@ -1,90 +1,64 @@
-# ClinTask — Multi-Agent Task Management System
+# ClinTask — Fair Clinical Triage AI
 
-A multi-agent AI system built with **Google ADK + Gemini 2.0 Flash** that helps users manage tasks, schedules, and information through coordinated AI agents.
+A multi-agent clinical AI system built with **Google ADK + Gemini 2.5 Flash** that automates emergency department triage while actively detecting and flagging bias in automated medical decisions.
 
-Built for **Google Gen AI Academy APAC Edition — Track 1**
+**Built for Google Solution Challenge 2026 — Unbiased AI Decision Track**
+
+## The Problem
+AI systems making triage decisions in emergency departments are often opaque, biased, and unaccountable — putting vulnerable patients at risk of unfair or delayed care.
+
+## The Solution
+ClinTask orchestrates four specialized AI agents — Intake, Triage Scorer, Bias Auditor, and Discharge Planner — each powered by Gemini 2.5 Flash via Google ADK. It takes raw clinical notes as input and produces evidence-based NEWS2 severity scores, care recommendations, and a real-time bias audit on every decision.
 
 ## Architecture
 
-```
-┌─────────────────────────────────────┐
-│     ClinTask Coordinator Agent      │
-│        (Primary / Router)           │
-└──────┬──────────┬──────────┬────────┘
-       │          │          │
-       ▼          ▼          ▼
-┌──────────┐ ┌──────────┐ ┌──────────┐
-│  Task    │ │ Schedule │ │  Notes   │
-│ Manager  │ │  Agent   │ │  Agent   │
-│  Agent   │ │          │ │          │
-└────┬─────┘ └────┬─────┘ └────┬─────┘
-     │            │            │
-     ▼            ▼            ▼
-┌─────────────────────────────────────┐
-│     SQLite Database (MCP Tools)     │
-│   tasks | schedules | notes tables  │
-└─────────────────────────────────────┘
-```
+┌─────────────────────────────────────────┐
+│       ClinTask Coordinator Agent        │
+│         (Google ADK + Gemini 2.5)       │
+└───┬─────────────┬───────────────┬───────┘
+│             │               │
+▼             ▼               ▼
+┌────────┐  ┌──────────┐  ┌─────────────┐
+│ Intake │  │  Triage  │  │    Bias     │
+│ Agent  │→ │  Scorer  │→ │  Auditor   │
+│        │  │  NEWS2   │  │   Agent    │
+└────────┘  └──────────┘  └─────────────┘
+│
+▼
+┌───────────────────┐
+│ Discharge Planner │
+│     Agent         │
+└───────────────────┘
 
-## Core Requirements Met
+## Key Features
+- **NEWS2 Scoring** — clinically validated, bias-resistant severity scoring
+- **Bias Auditor Agent** — flags demographic anomalies in every triage decision
+- **Full Explainability Trail** — every agent logs its reasoning step-by-step
+- **FHIR R4 Compatible** — structured output for hospital EHR integration
+- **Clinical Task Management** — task, schedule, and notes agents for clinical workflow
+- **Cloud Run Deployed** — scalable, serverless on Google Cloud
 
-| Requirement | Implementation |
-|---|---|
-| Primary agent coordinating sub-agents | Coordinator routes to 3 sub-agents |
-| Structured data storage & retrieval | SQLite with tasks, schedules, notes tables |
-| Multiple tools via MCP | Task tool, Schedule tool, Notes tool |
-| Multi-step workflows | Cross-agent coordination (e.g., "plan my day") |
-| API-based deployment | Cloud Run with HTTP endpoint |
-
-## Project Structure
-
-```
-clintask/
-├── clintask_agents/
-│   ├── __init__.py
-│   └── agent.py              # Coordinator + 3 sub-agents
-├── tools/
-│   ├── __init__.py
-│   ├── task_tool.py           # Task manager MCP tool
-│   ├── schedule_tool.py       # Calendar MCP tool
-│   └── notes_tool.py          # Notes MCP tool
-├── db/
-│   ├── __init__.py
-│   └── database.py            # SQLite operations
-├── Dockerfile
-├── requirements.txt
-├── .env
-└── README.md
-```
-
-## Example Interactions
-
-**Single-agent task:**
-> "Create a high-priority task: Review patient lab results by Friday"
-
-**Multi-step workflow:**
-> "Plan my day — show my pending tasks and upcoming schedule"
-
-**Cross-agent coordination:**
-> "Schedule a meeting with Dr. Kumar tomorrow at 2pm and create a task to prepare the agenda"
+## Tech Stack
+- **Google ADK** — multi-agent orchestration
+- **Gemini 2.5 Flash** — LLM inference for all agents
+- **Google Cloud Run** — serverless deployment
+- **FastAPI** — REST API backend
+- **SQLite** — structured data persistence
+- **Python 3.12**
 
 ## Local Setup
-
 ```bash
 pip install -r requirements.txt
-# Edit .env with your Gemini API key
+# Add your Gemini API key to .env
+set GOOGLE_API_KEY=YOUR_KEY
 adk web
 # Open http://localhost:8000 → select clintask_agents
 ```
 
 ## Deploy to Cloud Run
-
 ```bash
 gcloud auth login
-gcloud config set project YOUR_PROJECT_ID
-
-gcloud services enable run.googleapis.com artifactregistry.googleapis.com cloudbuild.googleapis.com
-
+gcloud config set project clintask-agent-2026
 gcloud run deploy clintask-agent \
   --source . \
   --region asia-south1 \
@@ -92,14 +66,5 @@ gcloud run deploy clintask-agent \
   --set-env-vars "GOOGLE_API_KEY=YOUR_KEY"
 ```
 
-## Tech Stack
-
-- **Google ADK** — Agent orchestration framework
-- **Gemini 2.0 Flash** — LLM inference
-- **SQLite** — Structured data persistence
-- **Cloud Run** — Serverless deployment
-- **Python 3.12**
-
 ## Author
-
 Faleha Qazi — B.Tech CSE (Health Informatics), VIT Bhopal University
