@@ -5,20 +5,25 @@ A multi-agent clinical AI system built with **Google ADK + Gemini 2.5 Flash** th
 **Built for Google Solution Challenge 2026 — Unbiased AI Decision Track**
 
 ## The Problem
+
 AI systems making triage decisions in emergency departments are often opaque, biased, and unaccountable — putting vulnerable patients at risk of unfair or delayed care.
 
 ## The Solution
+
 ClinTask orchestrates four specialized AI agents — Intake, Triage Scorer, Bias Auditor, and Discharge Planner — each powered by Gemini 2.5 Flash via Google ADK. It takes raw clinical notes as input and produces evidence-based NEWS2 severity scores, care recommendations, and a real-time bias audit on every decision.
 
 ## Architecture
 
-ClinTask Coordinator (Google ADK + Gemini 2.5 Flash)
-├── Intake Agent          → extracts vitals, demographics, chief complaint
-├── Triage Scorer Agent   → computes NEWS2 score, assigns severity level
-├── Bias Auditor Agent    → flags demographic anomalies, outputs FAIR/REVIEW
-└── Discharge Planner     → recommends care pathway + logs reasoning chain
+| Agent | Role |
+|---|---|
+| Coordinator | Routes requests to specialized sub-agents |
+| Intake Agent | Extracts vitals, demographics, chief complaint |
+| Triage Scorer | Computes NEWS2 score, assigns severity level |
+| Bias Auditor | Flags demographic anomalies, outputs FAIR or REVIEW REQUIRED |
+| Discharge Planner | Recommends care pathway and logs reasoning chain |
 
 ## Key Features
+
 - **NEWS2 Scoring** — clinically validated, bias-resistant severity scoring
 - **Bias Auditor Agent** — flags demographic anomalies in every triage decision
 - **Full Explainability Trail** — every agent logs its reasoning step-by-step
@@ -27,32 +32,20 @@ ClinTask Coordinator (Google ADK + Gemini 2.5 Flash)
 - **Cloud Run Deployed** — scalable, serverless on Google Cloud
 
 ## Tech Stack
-- **Google ADK** — multi-agent orchestration
-- **Gemini 2.5 Flash** — LLM inference for all agents
-- **Google Cloud Run** — serverless deployment
-- **FastAPI** — REST API backend
-- **SQLite** — structured data persistence
-- **Python 3.12**
+
+- Google ADK and Gemini 2.5 Flash
+- Google Cloud Run
+- FastAPI and SQLite
+- Python 3.12
+
+## Live Demo
+
+https://clintask-agent-218190051037.asia-south1.run.app
 
 ## Local Setup
-```bash
-pip install -r requirements.txt
-# Add your Gemini API key to .env
-set GOOGLE_API_KEY=YOUR_KEY
-adk web
-# Open http://localhost:8000 → select clintask_agents
-```
 
-## Deploy to Cloud Run
-```bash
-gcloud auth login
-gcloud config set project clintask-agent-2026
-gcloud run deploy clintask-agent \
-  --source . \
-  --region asia-south1 \
-  --allow-unauthenticated \
-  --set-env-vars "GOOGLE_API_KEY=YOUR_KEY"
-```
+Add your Gemini API key to .env then run: adk web
 
 ## Author
-Faleha Qazi — B.Tech CSE (Health Informatics), VIT Bhopal University
+
+Faleha Qazi — B.Tech CSE Health Informatics, VIT Bhopal University
