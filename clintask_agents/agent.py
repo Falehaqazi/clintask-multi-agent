@@ -11,7 +11,7 @@ from tools.triage_tool import triage_clinical_note
 
 task_agent = Agent(
     name="task_manager_agent",
-    model="gemini-2.0-flash-lite",
+    model="gemini-2.5-flash",
     description="Manages tasks: create, list, update status, and delete tasks.",
     instruction="""You are the Task Manager agent. Use the manage_task tool for all operations:
 - create: provide title, description, priority, assigned_to, due_date
@@ -24,7 +24,7 @@ Default priority is medium. Confirm all actions clearly.""",
 
 schedule_agent = Agent(
     name="schedule_agent",
-    model="gemini-2.0-flash-lite",
+    model="gemini-2.5-flash",
     description="Manages calendar and schedule: create appointments, list events, delete events.",
     instruction="""You are the Schedule agent. Use the manage_schedule tool for all operations:
 - create: provide title, start_time (YYYY-MM-DD HH:MM), end_time, description, location
@@ -36,7 +36,7 @@ Confirm all actions clearly.""",
 
 notes_agent = Agent(
     name="notes_agent",
-    model="gemini-2.0-flash-lite",
+    model="gemini-2.5-flash",
     description="Manages notes: create, list, read, and delete notes.",
     instruction="""You are the Notes agent. Use the manage_notes tool for all operations:
 - create: provide title, content, tags
@@ -49,7 +49,7 @@ Confirm all actions clearly.""",
 
 triage_agent = Agent(
     name="triage_agent",
-    model="gemini-2.0-flash-lite",
+    model="gemini-2.5-flash",
     description="Clinical triage agent. Computes NEWS2 score, assigns severity, gives care recommendation, and runs bias audit.",
     instruction="""You are the Clinical Triage Agent for ClinTask. You assess emergency department patients.
 
@@ -77,7 +77,7 @@ Always end with: Audit trail logged. All agent reasoning recorded.""",
 
 root_agent = Agent(
     name="clintask_coordinator",
-    model="gemini-2.0-flash-lite",
+    model="gemini-2.5-flash",
     description="ClinTask Coordinator routes requests to the right sub-agent.",
     instruction="""You are ClinTask, an intelligent multi-agent assistant for clinical task management and patient triage.
 
