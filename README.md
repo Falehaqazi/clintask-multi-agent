@@ -12,23 +12,11 @@ ClinTask orchestrates four specialized AI agents — Intake, Triage Scorer, Bias
 
 ## Architecture
 
-┌─────────────────────────────────────────┐
-│       ClinTask Coordinator Agent        │
-│         (Google ADK + Gemini 2.5)       │
-└───┬─────────────┬───────────────┬───────┘
-│             │               │
-▼             ▼               ▼
-┌────────┐  ┌──────────┐  ┌─────────────┐
-│ Intake │  │  Triage  │  │    Bias     │
-│ Agent  │→ │  Scorer  │→ │  Auditor   │
-│        │  │  NEWS2   │  │   Agent    │
-└────────┘  └──────────┘  └─────────────┘
-│
-▼
-┌───────────────────┐
-│ Discharge Planner │
-│     Agent         │
-└───────────────────┘
+ClinTask Coordinator (Google ADK + Gemini 2.5 Flash)
+├── Intake Agent          → extracts vitals, demographics, chief complaint
+├── Triage Scorer Agent   → computes NEWS2 score, assigns severity level
+├── Bias Auditor Agent    → flags demographic anomalies, outputs FAIR/REVIEW
+└── Discharge Planner     → recommends care pathway + logs reasoning chain
 
 ## Key Features
 - **NEWS2 Scoring** — clinically validated, bias-resistant severity scoring
